@@ -139,13 +139,31 @@ Le projet est configuré pour un déploiement facile sur Netlify :
    NODE_ENV=production
    ```
 
-### Déploiement Backend
+### 🌊 Déploiement Backend sur DigitalOcean (Recommandé)
 
-Le backend Django peut être déployé sur :
-- **Heroku** (recommandé pour débuter)
-- **Railway** (moderne et simple)
-- **DigitalOcean App Platform**
-- **AWS/GCP/Azure**
+**Architecture de déploiement :**
+- **Frontend** : Netlify ✅ (Déjà configuré)
+- **Backend** : DigitalOcean App Platform
+- **Base de données** : PostgreSQL managée
+
+**Déploiement rapide :**
+
+1. **Créer une App DigitalOcean**
+   - Connecter le repository GitHub `erp_marocaine`
+   - Sélectionner le dossier `backend` comme source
+   - Choisir la région (Frankfurt pour l'Europe)
+
+2. **Variables d'environnement requises :**
+   ```bash
+   DJANGO_SETTINGS_MODULE=config.settings.digitalocean
+   SECRET_KEY=votre-clé-secrète-super-longue
+   CORS_ALLOWED_ORIGINS=https://votre-frontend.netlify.app
+   CSRF_TRUSTED_ORIGINS=https://votre-frontend.netlify.app
+   ```
+
+3. **Ajouter PostgreSQL** (DigitalOcean fournit automatiquement `DATABASE_URL`)
+
+4. **Coût estimé** : ~12€/mois (App + PostgreSQL)
 
 ### Variables d'Environnement
 
@@ -153,7 +171,11 @@ Copiez et configurez les fichiers d'environnement :
 - `.env.example` → `.env` (backend)
 - `frontend/.env.example` → `frontend/.env` (frontend)
 
-📖 **Consultez le [Guide de Déploiement Complet](./DEPLOYMENT.md) pour les instructions détaillées.**
+### 📖 Guides de Déploiement Détaillés
+
+- 🌊 **[Guide DigitalOcean Complet](./DIGITALOCEAN_DEPLOYMENT.md)** - Déploiement backend
+- 🌐 **[Guide Netlify Complet](./DEPLOYMENT.md)** - Configuration frontend
+- 🚂 **[Guide Railway](./RAILWAY_DEPLOYMENT.md)** - Alternative backend
 
 ## 📁 Structure du Projet
 

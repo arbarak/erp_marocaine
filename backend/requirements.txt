@@ -41,5 +41,8 @@ whitenoise==6.6.0
 # Environment and configuration
 python-dotenv==1.0.0
 
-# Additional packages for Railway deployment
+# Database URL parsing for DigitalOcean
+dj-database-url==2.1.0
+
+# Additional packages for production deployment
 gevent==23.9.1

@@ -1,0 +1,85 @@
+name: erp-marocaine-backend
+region: fra
+
+services:
+- name: web
+  source_dir: backend
+  github:
+    repo: arbarak/erp_marocaine
+    branch: master
+  run_command: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+  environment_slug: python
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  
+  envs:
+  - key: DJANGO_SETTINGS_MODULE
+    value: config.settings.digitalocean
+  - key: DEBUG
+    value: "False"
+  - key: PYTHONPATH
+    value: /app
+  - key: PYTHONUNBUFFERED
+    value: "1"
+  - key: SECRET_KEY
+    type: SECRET
+    value: your-secret-key-here
+  - key: CORS_ALLOWED_ORIGINS
+    value: https://your-frontend.netlify.app
+  - key: CSRF_TRUSTED_ORIGINS
+    value: https://your-frontend.netlify.app
+  - key: DEFAULT_FROM_EMAIL
+    value: noreply@erp.ma
+  
+  health_check:
+    http_path: /api/health/
+    initial_delay_seconds: 60
+    period_seconds: 10
+    timeout_seconds: 5
+    success_threshold: 1
+    failure_threshold: 3
+
+  routes:
+  - path: /
+
+databases:
+- name: erp-db
+  engine: PG
+  version: "14"
+  size: basic-xs
+  num_nodes: 1
+
+# Optional: Redis for caching and Celery
+# - name: erp-redis
+#   engine: REDIS
+#   version: "7"
+#   size: basic-xs
+
+# Optional: Worker service for Celery
+# workers:
+# - name: celery-worker
+#   source_dir: backend
+#   github:
+#     repo: arbarak/erp_marocaine
+#     branch: master
+#   run_command: celery -A config worker --loglevel=info
+#   environment_slug: python
+#   instance_count: 1
+#   instance_size_slug: basic-xxs
+#   
+#   envs:
+#   - key: DJANGO_SETTINGS_MODULE
+#     value: config.settings.digitalocean
+#   - key: DEBUG
+#     value: "False"
+
+# Optional: Celery Beat for scheduled tasks
+# - name: celery-beat
+#   source_dir: backend
+#   github:
+#     repo: arbarak/erp_marocaine
+#     branch: master
+#   run_command: celery -A config beat --loglevel=info
+#   environment_slug: python
+#   instance_count: 1
+#   instance_size_slug: basic-xxs
