@@ -1,0 +1,134 @@
+[
+  {
+    "model": "accounting.account",
+    "pk": 1,
+    "fields": {
+      "code": "1000",
+      "name": "Capital Social",
+      "type": "EQUITY",
+      "parent": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "accounting.account",
+    "pk": 2,
+    "fields": {
+      "code": "2000",
+      "name": "Immobilisations Incorporelles",
+      "type": "ASSET",
+      "parent": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "accounting.account",
+    "pk": 3,
+    "fields": {
+      "code": "3000",
+      "name": "Stocks",
+      "type": "ASSET",
+      "parent": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "accounting.account",
+    "pk": 4,
+    "fields": {
+      "code": "3410",
+      "name": "Clients",
+      "type": "ASSET",
+      "parent": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "accounting.account",
+    "pk": 5,
+    "fields": {
+      "code": "4410",
+      "name": "Fournisseurs",
+      "type": "LIABILITY",
+      "parent": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "accounting.account",
+    "pk": 6,
+    "fields": {
+      "code": "4455",
+      "name": "TVA Collectée",
+      "type": "LIABILITY",
+      "parent": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "accounting.account",
+    "pk": 7,
+    "fields": {
+      "code": "4456",
+      "name": "TVA Déductible",
+      "type": "ASSET",
+      "parent": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "accounting.account",
+    "pk": 8,
+    "fields": {
+      "code": "4457",
+      "name": "TVA Retenue à la Source",
+      "type": "LIABILITY",
+      "parent": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "accounting.account",
+    "pk": 9,
+    "fields": {
+      "code": "5000",
+      "name": "Banque",
+      "type": "ASSET",
+      "parent": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "accounting.account",
+    "pk": 10,
+    "fields": {
+      "code": "5100",
+      "name": "Caisse",
+      "type": "ASSET",
+      "parent": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "accounting.account",
+    "pk": 11,
+    "fields": {
+      "code": "6000",
+      "name": "Achats",
+      "type": "EXPENSE",
+      "parent": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "accounting.account",
+    "pk": 12,
+    "fields": {
+      "code": "7000",
+      "name": "Ventes",
+      "type": "REVENUE",
+      "parent": null,
+      "is_active": true
+    }
+  }
+]

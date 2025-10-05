@@ -1,0 +1,106 @@
+[
+  {
+    "model": "tax_engine.tax",
+    "pk": 1,
+    "fields": {
+      "code": "TVA",
+      "name": "Taxe sur la Valeur Ajoutée",
+      "type": "VAT",
+      "recoverable": true,
+      "inclusive": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "tax_engine.tax",
+    "pk": 2,
+    "fields": {
+      "code": "RAS_TVA",
+      "name": "Retenue à la Source - TVA",
+      "type": "WHT",
+      "recoverable": false,
+      "inclusive": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "tax_engine.taxrate",
+    "pk": 1,
+    "fields": {
+      "tax": 1,
+      "rate_pct": "20.00",
+      "description": "TVA Taux Normal"
+    }
+  },
+  {
+    "model": "tax_engine.taxrate",
+    "pk": 2,
+    "fields": {
+      "tax": 1,
+      "rate_pct": "14.00",
+      "description": "TVA Taux Réduit 1"
+    }
+  },
+  {
+    "model": "tax_engine.taxrate",
+    "pk": 3,
+    "fields": {
+      "tax": 1,
+      "rate_pct": "10.00",
+      "description": "TVA Taux Réduit 2"
+    }
+  },
+  {
+    "model": "tax_engine.taxrate",
+    "pk": 4,
+    "fields": {
+      "tax": 1,
+      "rate_pct": "7.00",
+      "description": "TVA Taux Réduit 3"
+    }
+  },
+  {
+    "model": "tax_engine.taxrateversion",
+    "pk": 1,
+    "fields": {
+      "tax_rate": 1,
+      "valid_from": "2020-01-01",
+      "valid_to": "2030-12-31",
+      "withheld_flag": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "tax_engine.taxrateversion",
+    "pk": 2,
+    "fields": {
+      "tax_rate": 2,
+      "valid_from": "2020-01-01",
+      "valid_to": "2030-12-31",
+      "withheld_flag": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "tax_engine.taxrateversion",
+    "pk": 3,
+    "fields": {
+      "tax_rate": 3,
+      "valid_from": "2020-01-01",
+      "valid_to": "2030-12-31",
+      "withheld_flag": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "tax_engine.taxrateversion",
+    "pk": 4,
+    "fields": {
+      "tax_rate": 4,
+      "valid_from": "2020-01-01",
+      "valid_to": "2030-12-31",
+      "withheld_flag": false,
+      "is_active": true
+    }
+  }
+]

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP System Demo - Frontend UI/UX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --primary: 221.2 83.2% 53.3%;
+            --primary-foreground: 210 40% 98%;
+            --muted: 210 40% 96%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --border: 214.3 31.8% 91.4%;
+        }
+        
+        .card {
+            background: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: hsl(var(--card-foreground));
+        }
+        
+        .card-description {
+            color: hsl(var(--muted-foreground));
+            font-size: 0.875rem;
+        }
+        
+        .btn-primary {
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">ERP</span>
+                    </div>
+                    <h1 class="text-xl font-semibold text-gray-900">Système ERP Marocain</h1>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#" class="text-gray-600 hover:text-gray-900">Tableau de bord</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">Catalogue</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">Stock</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">Achats</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">Ventes</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">Facturation</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Welcome Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+                Bienvenue dans votre ERP
+            </h1>
+            <p class="text-xl text-gray-600 mb-8">
+                Système de gestion avancé pour les entreprises marocaines
+            </p>
+            <button class="btn-primary">
+                Commencer
+            </button>
+        </div>
+
+        <!-- Modules Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <div class="card">
+                <h3 class="card-title">📦 Catalogue</h3>
+                <p class="card-description">
+                    Gestion des produits et services
+                </p>
+            </div>
+            
+            <div class="card">
+                <h3 class="card-title">📊 Stock</h3>
+                <p class="card-description">
+                    Gestion des stocks et entrepôts
+                </p>
+            </div>
+            
+            <div class="card">
+                <h3 class="card-title">🧾 Facturation</h3>
+                <p class="card-description">
+                    Facturation et crédit notes
+                </p>
+            </div>
+            
+            <div class="card">
+                <h3 class="card-title">🛒 Achats</h3>
+                <p class="card-description">
+                    Gestion des fournisseurs et commandes
+                </p>
+            </div>
+            
+            <div class="card">
+                <h3 class="card-title">💰 Ventes</h3>
+                <p class="card-description">
+                    Gestion des clients et commandes
+                </p>
+            </div>
+            
+            <div class="card">
+                <h3 class="card-title">📈 Comptabilité</h3>
+                <p class="card-description">
+                    Plan comptable et écritures
+                </p>
+            </div>
+        </div>
+
+        <!-- Compliance Section -->
+        <div class="bg-blue-50 rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-900">
+                Conformité Marocaine
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div>
+                    <strong class="text-gray-900">ICE</strong>
+                    <p class="text-gray-600">
+                        Identifiant Commun de l'Entreprise
+                    </p>
+                </div>
+                <div>
+                    <strong class="text-gray-900">TVA</strong>
+                    <p class="text-gray-600">
+                        Taxe sur la Valeur Ajoutée (20/14/10/7%)
+                    </p>
+                </div>
+                <div>
+                    <strong class="text-gray-900">RAS/TVA</strong>
+                    <p class="text-gray-600">
+                        Retenue à la Source sur TVA
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <h3 class="text-xl font-semibold mb-4">🚀 Fonctionnalités Avancées</h3>
+                <ul class="space-y-2 text-gray-600">
+                    <li>✅ Multi-entreprises avec isolation complète</li>
+                    <li>✅ Gestion des stocks en temps réel</li>
+                    <li>✅ Facturation PDF en français</li>
+                    <li>✅ Comptabilité double entrée (PCGM)</li>
+                    <li>✅ Rapports de conformité TVA</li>
+                    <li>✅ Analytics et business intelligence</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4">🏗️ Architecture Technique</h3>
+                <ul class="space-y-2 text-gray-600">
+                    <li>🔧 Django 5.0.1 + Django REST Framework</li>
+                    <li>⚛️ React 19 + TypeScript + Tailwind CSS</li>
+                    <li>🗄️ PostgreSQL 16 avec Row Level Security</li>
+                    <li>🚀 Redis pour cache et tâches background</li>
+                    <li>🐳 Docker + Kubernetes ready</li>
+                    <li>📊 Monitoring avec Prometheus + Grafana</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-16">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2025 ERP System - Système de gestion pour entreprises marocaines</p>
+            <p class="text-gray-400 text-sm mt-2">
+                Développé avec Django 5 + React 19 - Production Ready ✅
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

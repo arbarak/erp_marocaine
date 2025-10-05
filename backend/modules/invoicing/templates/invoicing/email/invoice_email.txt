@@ -1,0 +1,27 @@
+Dear {{ party_name }},
+
+Please find attached invoice {{ invoice.invoice_number }} dated {{ invoice.invoice_date }}.
+
+Invoice Details:
+- Invoice Number: {{ invoice.invoice_number }}
+- Invoice Date: {{ invoice.invoice_date }}
+- Due Date: {{ invoice.due_date }}
+- Total Amount: {{ invoice.total_amount }} {{ invoice.company.default_currency|default:"MAD" }}
+
+{% if invoice.description %}
+Description: {{ invoice.description }}
+{% endif %}
+
+Payment Terms: {{ invoice.payment_terms_days }} days
+
+Please process payment by the due date to avoid any late fees.
+
+If you have any questions regarding this invoice, please contact us at {{ company.email|default:"contact@company.com" }}.
+
+Thank you for your business.
+
+Best regards,
+{{ company.name }}
+{% if company.phone %}Phone: {{ company.phone }}{% endif %}
+{% if company.email %}Email: {{ company.email }}{% endif %}
+{% if company.website %}Website: {{ company.website }}{% endif %}

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ labels.receipt }} {{ payment.payment_number }}</title>
+</head>
+<body>
+    <!-- Header Section -->
+    <div class="header">
+        <div class="company-info">
+            <h1>{{ company.name }}</h1>
+            <p>
+                {% if company.address %}{{ company.address }}<br>{% endif %}
+                {% if company.city %}{{ company.city }}{% endif %}
+                {% if company.postal_code %} {{ company.postal_code }}{% endif %}
+                {% if company.country %}<br>{{ company.country }}{% endif %}
+            </p>
+            <p>
+                {% if company.phone %}Tél: {{ company.phone }}<br>{% endif %}
+                {% if company.email %}Email: {{ company.email }}<br>{% endif %}
+                {% if company.website %}Web: {{ company.website }}{% endif %}
+            </p>
+        </div>
+        
+        <div class="invoice-info">
+            <div class="invoice-title">{{ labels.receipt }}</div>
+            <div class="invoice-number">{{ payment.payment_number }}</div>
+            <p>
+                <strong>{{ labels.payment_date }}:</strong> {{ payment.payment_date|date:"d/m/Y" }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Parties Section -->
+    <div class="parties">
+        <div class="party-box">
+            <div class="party-title">
+                {% if payment.customer %}
+                    {{ labels.customer }}
+                {% else %}
+                    {{ labels.supplier }}
+                {% endif %}
+            </div>
+            <p>
+                <strong>{{ party.name }}</strong><br>
+                {% if party.address %}{{ party.address }}<br>{% endif %}
+                {% if party.city %}{{ party.city }}{% endif %}
+                {% if party.postal_code %} {{ party.postal_code }}{% endif %}
+                {% if party.country %}<br>{{ party.country }}{% endif %}
+            </p>
+            <p>
+                {% if party.ice %}<strong>ICE:</strong> {{ party.ice }}<br>{% endif %}
+                {% if party.if_number %}<strong>IF:</strong> {{ party.if_number }}<br>{% endif %}
+                {% if party.rc %}<strong>RC:</strong> {{ party.rc }}<br>{% endif %}
+                {% if party.phone %}<strong>Tél:</strong> {{ party.phone }}<br>{% endif %}
+                {% if party.email %}<strong>Email:</strong> {{ party.email }}{% endif %}
+            </p>
+        </div>
+
+        <div class="party-box">
+            <div class="party-title">Reçu par</div>
+            <p>
+                <strong>{{ company.name }}</strong><br>
+                {% if company.address %}{{ company.address }}<br>{% endif %}
+                {% if company.city %}{{ company.city }}{% endif %}
+                {% if company.postal_code %} {{ company.postal_code }}{% endif %}
+                {% if company.country %}<br>{{ company.country }}{% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Payment Details -->
+    <div class="invoice-details">
+        <div class="details-row">
+            <span class="details-label">{{ labels.payment_number }}:</span>
+            <span>{{ payment.payment_number }}</span>
+        </div>
+        <div class="details-row">
+            <span class="details-label">{{ labels.payment_date }}:</span>
+            <span>{{ payment.payment_date|date:"d/m/Y" }}</span>
+        </div>
+        <div class="details-row">
+            <span class="details-label">{{ labels.amount }}:</span>
+            <span class="amount"><strong>{{ format_amount:payment.amount }}</strong></span>
+        </div>
+        <div class="details-row">
+            <span class="details-label">{{ labels.method }}:</span>
+            <span>{{ payment.get_payment_method_display }}</span>
+        </div>
+        {% if payment.reference %}
+        <div class="details-row">
+            <span class="details-label">{{ labels.reference }}:</span>
+            <span>{{ payment.reference }}</span>
+        </div>
+        {% endif %}
+        {% if payment.check_number %}
+        <div class="details-row">
+            <span class="details-label">Numéro de chèque:</span>
+            <span>{{ payment.check_number }}</span>
+        </div>
+        {% endif %}
+        {% if payment.bank_reference %}
+        <div class="details-row">
+            <span class="details-label">Référence bancaire:</span>
+            <span>{{ payment.bank_reference }}</span>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Allocated Invoices -->
+    {% if allocations %}
+    <div class="line-items">
+        <h4>{{ labels.allocated_to }}</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 40%;">{{ labels.invoice_number }}</th>
+                    <th style="width: 20%;" class="text-center">Date facture</th>
+                    <th style="width: 20%;" class="text-right">Montant facture</th>
+                    <th style="width: 20%;" class="text-right">{{ labels.allocated_amount }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for allocation in allocations %}
+                <tr>
+                    <td>{{ allocation.invoice.invoice_number }}</td>
+                    <td class="text-center">{{ allocation.invoice.invoice_date|date:"d/m/Y" }}</td>
+                    <td class="text-right amount">{{ format_amount:allocation.invoice.total_amount }}</td>
+                    <td class="text-right amount">{{ format_amount:allocation.allocated_amount }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- Payment Summary -->
+    <div class="totals">
+        <table>
+            <tr class="grand-total">
+                <td class="total-label">Montant total reçu:</td>
+                <td class="total-amount amount">{{ format_amount:payment.amount }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Description -->
+    {% if payment.description %}
+    <div class="payment-terms">
+        <h4>{{ labels.description }}</h4>
+        <p>{{ payment.description|linebreaks }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Notes -->
+    {% if payment.notes %}
+    <div class="payment-terms">
+        <h4>Observations</h4>
+        <p>{{ payment.notes|linebreaks }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Signature Section -->
+    <div style="margin-top: 50px; clear: both;">
+        <div style="float: left; width: 45%; text-align: center; border-top: 1px solid #333; padding-top: 10px;">
+            <p><strong>Signature du client</strong></p>
+            <br><br><br>
+        </div>
+        <div style="float: right; width: 45%; text-align: center; border-top: 1px solid #333; padding-top: 10px;">
+            <p><strong>Cachet et signature</strong></p>
+            <br><br><br>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="moroccan-compliance">
+            <p>
+                <strong>{{ company.name }}</strong> - 
+                ICE: {{ company.ice }}
+                {% if company.if_number %} - IF: {{ company.if_number }}{% endif %}
+                {% if company.rc %} - RC: {{ company.rc }}{% endif %}
+            </p>
+            <p style="font-size: 7pt; margin-top: 10px;">
+                Reçu généré le {{ today|date:"d/m/Y à H:i" }} - 
+                Document conforme à la réglementation marocaine en vigueur
+            </p>
+        </div>
+    </div>
+</body>
+</html>

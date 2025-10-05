@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ labels.invoice }} {{ invoice.invoice_number }}</title>
+</head>
+<body>
+    <!-- Header Section -->
+    <div class="header">
+        <div class="company-info">
+            <h1>{{ company.name }}</h1>
+            <p>
+                {% if company.address %}{{ company.address }}<br>{% endif %}
+                {% if company.city %}{{ company.city }}{% endif %}
+                {% if company.postal_code %} {{ company.postal_code }}{% endif %}
+                {% if company.country %}<br>{{ company.country }}{% endif %}
+            </p>
+            <p>
+                {% if company.phone %}Tél: {{ company.phone }}<br>{% endif %}
+                {% if company.email %}Email: {{ company.email }}<br>{% endif %}
+                {% if company.website %}Web: {{ company.website }}{% endif %}
+            </p>
+        </div>
+        
+        <div class="invoice-info">
+            <div class="invoice-title">{{ labels.invoice }}</div>
+            <div class="invoice-number">{{ invoice.invoice_number }}</div>
+            <p>
+                <strong>{{ labels.invoice_date }}:</strong> {{ invoice.invoice_date|date:"d/m/Y" }}<br>
+                <strong>{{ labels.due_date }}:</strong> {{ invoice.due_date|date:"d/m/Y" }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Parties Section -->
+    <div class="parties">
+        <div class="party-box">
+            <div class="party-title">
+                {% if invoice.is_customer_invoice %}
+                    {{ labels.customer }}
+                {% else %}
+                    {{ labels.supplier }}
+                {% endif %}
+            </div>
+            <p>
+                <strong>{{ party.name }}</strong><br>
+                {% if party.address %}{{ party.address }}<br>{% endif %}
+                {% if party.city %}{{ party.city }}{% endif %}
+                {% if party.postal_code %} {{ party.postal_code }}{% endif %}
+                {% if party.country %}<br>{{ party.country }}{% endif %}
+            </p>
+            <p>
+                {% if party.ice %}<strong>ICE:</strong> {{ party.ice }}<br>{% endif %}
+                {% if party.if_number %}<strong>IF:</strong> {{ party.if_number }}<br>{% endif %}
+                {% if party.rc %}<strong>RC:</strong> {{ party.rc }}<br>{% endif %}
+                {% if party.phone %}<strong>Tél:</strong> {{ party.phone }}<br>{% endif %}
+                {% if party.email %}<strong>Email:</strong> {{ party.email }}{% endif %}
+            </p>
+        </div>
+
+        <div class="party-box">
+            <div class="party-title">Facturé par</div>
+            <p>
+                <strong>{{ company.name }}</strong><br>
+                {% if company.address %}{{ company.address }}<br>{% endif %}
+                {% if company.city %}{{ company.city }}{% endif %}
+                {% if company.postal_code %} {{ company.postal_code }}{% endif %}
+                {% if company.country %}<br>{{ company.country }}{% endif %}
+            </p>
+            <p>
+                {% if compliance.ice %}<strong>ICE:</strong> {{ compliance.ice }}<br>{% endif %}
+                {% if compliance.if_number %}<strong>IF:</strong> {{ compliance.if_number }}<br>{% endif %}
+                {% if compliance.rc %}<strong>RC:</strong> {{ compliance.rc }}<br>{% endif %}
+                {% if compliance.cnss %}<strong>CNSS:</strong> {{ compliance.cnss }}<br>{% endif %}
+                {% if compliance.patente %}<strong>Patente:</strong> {{ compliance.patente }}{% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Invoice Details -->
+    <div class="invoice-details">
+        <div class="details-row">
+            <span class="details-label">{{ labels.invoice_number }}:</span>
+            <span>{{ invoice.invoice_number }}</span>
+        </div>
+        <div class="details-row">
+            <span class="details-label">{{ labels.invoice_date }}:</span>
+            <span>{{ invoice.invoice_date|date:"d/m/Y" }}</span>
+        </div>
+        <div class="details-row">
+            <span class="details-label">{{ labels.due_date }}:</span>
+            <span>{{ invoice.due_date|date:"d/m/Y" }}</span>
+        </div>
+        {% if invoice.reference %}
+        <div class="details-row">
+            <span class="details-label">{{ labels.reference }}:</span>
+            <span>{{ invoice.reference }}</span>
+        </div>
+        {% endif %}
+        {% if invoice.supplier_invoice_number %}
+        <div class="details-row">
+            <span class="details-label">Facture fournisseur:</span>
+            <span>{{ invoice.supplier_invoice_number }}</span>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Line Items -->
+    <div class="line-items">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 40%;">{{ labels.description }}</th>
+                    <th style="width: 10%;" class="text-center">{{ labels.quantity }}</th>
+                    <th style="width: 15%;" class="text-right">{{ labels.unit_price }}</th>
+                    <th style="width: 10%;" class="text-right">{{ labels.discount }}</th>
+                    <th style="width: 10%;" class="text-right">TVA</th>
+                    <th style="width: 15%;" class="text-right">{{ labels.total }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for line in lines %}
+                <tr>
+                    <td>
+                        {{ line.description }}
+                        {% if line.product %}
+                        <br><small style="color: #666;">Réf: {{ line.product.internal_reference|default:line.product.code }}</small>
+                        {% endif %}
+                    </td>
+                    <td class="text-center amount">{{ line.quantity|floatformat:2 }}</td>
+                    <td class="text-right amount">{{ format_amount:line.unit_price }}</td>
+                    <td class="text-right amount">
+                        {% if line.discount_amount > 0 %}
+                            {{ format_amount:line.discount_amount }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td class="text-right amount">{{ line.tax_rate|floatformat:1 }}%</td>
+                    <td class="text-right amount">{{ format_amount:line.total_price }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Tax Details -->
+    {% if tax_details %}
+    <div class="line-items">
+        <h4>Détail de la TVA</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 30%;">Taux TVA</th>
+                    <th style="width: 35%;" class="text-right">Base HT</th>
+                    <th style="width: 35%;" class="text-right">Montant TVA</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tax in tax_details %}
+                <tr>
+                    <td>{{ tax.rate|floatformat:1 }}%</td>
+                    <td class="text-right amount">{{ format_amount:tax.base }}</td>
+                    <td class="text-right amount">{{ format_amount:tax.amount }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- Totals -->
+    <div class="totals">
+        <table>
+            <tr>
+                <td class="total-label">{{ labels.subtotal }} HT:</td>
+                <td class="total-amount amount">{{ format_amount:invoice.subtotal }}</td>
+            </tr>
+            {% if invoice.discount_amount > 0 %}
+            <tr>
+                <td class="total-label">{{ labels.discount }}:</td>
+                <td class="total-amount amount">-{{ format_amount:invoice.discount_amount }}</td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td class="total-label">Total {{ labels.tax }}:</td>
+                <td class="total-amount amount">{{ format_amount:invoice.tax_amount }}</td>
+            </tr>
+            <tr class="grand-total">
+                <td class="total-label">{{ labels.total_amount }}:</td>
+                <td class="total-amount amount">{{ format_amount:invoice.total_amount }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Payment Terms -->
+    {% if invoice.payment_terms_days > 0 %}
+    <div class="payment-terms">
+        <h4>{{ labels.payment_terms }}</h4>
+        <p>
+            Paiement à {{ invoice.payment_terms_days }} jours, soit le {{ invoice.due_date|date:"d/m/Y" }}.
+            {% if invoice.is_overdue %}
+            <br><strong style="color: #d63384;">FACTURE EN RETARD DE {{ invoice.days_overdue }} JOUR{{ invoice.days_overdue|pluralize }}!</strong>
+            {% endif %}
+        </p>
+    </div>
+    {% endif %}
+
+    <!-- Notes -->
+    {% if invoice.notes %}
+    <div class="payment-terms">
+        <h4>{{ labels.notes }}</h4>
+        <p>{{ invoice.notes|linebreaks }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="moroccan-compliance">
+            <p>
+                <strong>{{ company.name }}</strong> - 
+                {% if compliance.ice %}ICE: {{ compliance.ice }}{% endif %}
+                {% if compliance.if_number %} - IF: {{ compliance.if_number }}{% endif %}
+                {% if compliance.rc %} - RC: {{ compliance.rc }}{% endif %}
+            </p>
+            <p style="font-size: 7pt; margin-top: 10px;">
+                Document généré le {{ today|date:"d/m/Y à H:i" }} - 
+                Facture conforme à la réglementation marocaine en vigueur
+            </p>
+        </div>
+    </div>
+</body>
+</html>

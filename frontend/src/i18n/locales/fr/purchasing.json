@@ -1,0 +1,23 @@
+{
+  "title": "Achats",
+  "rfq": "Demande de devis",
+  "rfqs": "Demandes de devis",
+  "purchaseOrder": "Bon de commande",
+  "purchaseOrders": "Bons de commande",
+  "grn": "Bon de réception",
+  "grns": "Bons de réception",
+  "supplierBill": "Facture fournisseur",
+  "supplierBills": "Factures fournisseur",
+  "supplier": "Fournisseur",
+  "suppliers": "Fournisseurs",
+  "requestForQuote": "Demande de devis",
+  "quotation": "Devis",
+  "goodsReceiptNote": "Bon de réception marchandises",
+  "partiallyReceived": "Partiellement reçu",
+  "fullyReceived": "Entièrement reçu",
+  "orderDate": "Date de commande",
+  "expectedDate": "Date prévue",
+  "receivedDate": "Date de réception",
+  "receivedQuantity": "Quantité reçue",
+  "pendingQuantity": "Quantité en attente"
+}

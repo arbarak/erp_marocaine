@@ -1,0 +1,547 @@
+import { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { DuplicateModal, PrintModal, ActionModal } from '@/components/ActionModal'
+import { useToast } from '@/components/Toast'
+
+export function SalesOrderDetail() {
+  const navigate = useNavigate()
+  const { id } = useParams()
+  const { showSuccess } = useToast()
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [duplicateModalOpen, setDuplicateModalOpen] = useState(false)
+  const [printModalOpen, setPrintModalOpen] = useState(false)
+  const [deliveryNoteModalOpen, setDeliveryNoteModalOpen] = useState(false)
+
+  const [order, setOrder] = useState({
+    id: '',
+    orderNumber: '',
+    customerId: '',
+    customerName: '',
+    customerCode: '',
+    orderDate: '',
+    deliveryDate: '',
+    status: '',
+    priority: '',
+    salesPerson: '',
+    paymentTerms: 30,
+    currency: 'MAD',
+    notes: '',
+    shippingAddress: {
+      line1: '',
+      line2: '',
+      city: '',
+      postalCode: '',
+      region: '',
+      country: 'Maroc'
+    },
+    items: [] as Array<{
+      id: string
+      productId: string
+      productName: string
+      description: string
+      quantity: number
+      unitPrice: number
+      discount: number
+      tvaRate: number
+      total: number
+    }>,
+    subtotal: 0,
+    totalDiscount: 0,
+    totalTVA: 0,
+    totalAmount: 0,
+    createdAt: '',
+    updatedAt: '',
+    createdBy: ''
+  })
+
+  // Load sales order data on component mount
+  useEffect(() => {
+    const loadOrder = async () => {
+      if (!id) return
+      
+      setLoading(true)
+      try {
+        // Simulate API call to load sales order data
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        
+        // Mock data for the sales order
+        const mockOrder = {
+          id: id || '1',
+          orderNumber: 'SO-2025-001',
+          customerId: '1',
+          customerName: 'Société Générale Maroc',
+          customerCode: 'CUST-001',
+          orderDate: '2025-01-18',
+          deliveryDate: '2025-01-25',
+          status: 'confirmed',
+          priority: 'normal',
+          salesPerson: 'Ahmed Admin',
+          paymentTerms: 30,
+          currency: 'MAD',
+          notes: 'Commande urgente pour le nouveau bureau. Livraison directe au siège social.',
+          shippingAddress: {
+            line1: '55 Boulevard Zerktouni',
+            line2: 'Tour Attijariwafa Bank, 15ème étage',
+            city: 'Casablanca',
+            postalCode: '20000',
+            region: 'Casablanca-Settat',
+            country: 'Maroc'
+          },
+          items: [
+            {
+              id: '1',
+              productId: '1',
+              productName: 'Ordinateur Portable HP',
+              description: 'HP EliteBook 840 G8, Intel Core i7, 16GB RAM, 512GB SSD',
+              quantity: 10,
+              unitPrice: 8500,
+              discount: 5,
+              tvaRate: 20,
+              total: 80750
+            },
+            {
+              id: '2',
+              productId: '2',
+              productName: 'Imprimante Canon',
+              description: 'Canon PIXMA G3420, Multifonction, WiFi',
+              quantity: 5,
+              unitPrice: 2500,
+              discount: 0,
+              tvaRate: 20,
+              total: 12500
+            }
+          ],
+          subtotal: 93250,
+          totalDiscount: 4250,
+          totalTVA: 17800,
+          totalAmount: 106800,
+          createdAt: '2025-01-18T10:30:00Z',
+          updatedAt: '2025-01-18T14:20:00Z',
+          createdBy: 'Ahmed Admin'
+        }
+        
+        setOrder(mockOrder)
+      } catch (err) {
+        setError('Erreur lors du chargement de la commande')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadOrder()
+  }, [id])
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'draft': return 'Brouillon'
+      case 'confirmed': return 'Confirmée'
+      case 'processing': return 'En cours'
+      case 'shipped': return 'Expédiée'
+      case 'delivered': return 'Livrée'
+      case 'cancelled': return 'Annulée'
+      default: return status
+    }
+  }
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'draft': return 'bg-gray-100 text-gray-800'
+      case 'confirmed': return 'bg-blue-100 text-blue-800'
+      case 'processing': return 'bg-purple-100 text-purple-800'
+      case 'shipped': return 'bg-yellow-100 text-yellow-800'
+      case 'delivered': return 'bg-green-100 text-green-800'
+      case 'cancelled': return 'bg-red-100 text-red-800'
+      default: return 'bg-gray-100 text-gray-800'
+    }
+  }
+
+  const getPriorityLabel = (priority: string) => {
+    switch (priority) {
+      case 'low': return 'Basse'
+      case 'normal': return 'Normale'
+      case 'high': return 'Haute'
+      case 'urgent': return 'Urgente'
+      default: return priority
+    }
+  }
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'low': return 'bg-gray-100 text-gray-800'
+      case 'normal': return 'bg-blue-100 text-blue-800'
+      case 'high': return 'bg-orange-100 text-orange-800'
+      case 'urgent': return 'bg-red-100 text-red-800'
+      default: return 'bg-gray-100 text-gray-800'
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-center">
+              <div className="text-blue-600 text-4xl mb-4">⏳</div>
+              <h2 className="text-xl font-semibold mb-2">
+                Chargement de la commande...
+              </h2>
+              <p className="text-muted-foreground">
+                Veuillez patienter pendant le chargement des données.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <Card className="border-red-200 bg-red-50">
+          <CardContent className="p-6">
+            <div className="text-center">
+              <div className="text-red-600 text-4xl mb-4">❌</div>
+              <h2 className="text-xl font-semibold text-red-800 mb-2">
+                Erreur de chargement
+              </h2>
+              <p className="text-red-600 mb-4">{error}</p>
+              <Button onClick={() => navigate('/sales')}>
+                Retour aux Ventes
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  return (
+    <>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">
+            {order.orderNumber}
+          </h1>
+          <p className="text-muted-foreground">
+            Commande de vente • {order.customerName}
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => navigate('/sales')}>
+            Retour aux Ventes
+          </Button>
+          <Button onClick={() => navigate(`/sales/orders/edit/${order.id}`)}>
+            Modifier
+          </Button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Main Information */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Order Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Informations de Commande</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">N° de Commande</label>
+                  <p className="text-sm font-mono">{order.orderNumber}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Client</label>
+                  <p className="text-sm">{order.customerName} ({order.customerCode})</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Commercial</label>
+                  <p className="text-sm">{order.salesPerson}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Date de Commande</label>
+                  <p className="text-sm">{new Date(order.orderDate).toLocaleDateString('fr-FR')}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Date de Livraison</label>
+                  <p className="text-sm">{new Date(order.deliveryDate).toLocaleDateString('fr-FR')}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Conditions de Paiement</label>
+                  <p className="text-sm">{order.paymentTerms} jours</p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Badge className={getStatusColor(order.status)}>
+                  {getStatusLabel(order.status)}
+                </Badge>
+                <Badge className={getPriorityColor(order.priority)}>
+                  {getPriorityLabel(order.priority)}
+                </Badge>
+                <Badge variant="outline">
+                  {order.items.length} article{order.items.length > 1 ? 's' : ''}
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Shipping Address */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Adresse de Livraison</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <p className="text-sm">{order.shippingAddress.line1}</p>
+                {order.shippingAddress.line2 && (
+                  <p className="text-sm">{order.shippingAddress.line2}</p>
+                )}
+                <p className="text-sm">
+                  {order.shippingAddress.postalCode} {order.shippingAddress.city}
+                </p>
+                <p className="text-sm">{order.shippingAddress.region}</p>
+                <p className="text-sm font-medium">{order.shippingAddress.country}</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Order Items */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Articles de la Commande</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {order.items.map((item, index) => (
+                  <div key={item.id} className="border rounded-lg p-4">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h4 className="font-semibold text-lg">{item.productName}</h4>
+                        <p className="text-sm text-muted-foreground">{item.description}</p>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-lg font-bold">{item.total.toLocaleString()} MAD</div>
+                        <p className="text-sm text-muted-foreground">TTC</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                      <div>
+                        <label className="text-muted-foreground">Quantité</label>
+                        <p className="font-medium">{item.quantity}</p>
+                      </div>
+                      <div>
+                        <label className="text-muted-foreground">Prix Unitaire</label>
+                        <p className="font-medium">{item.unitPrice.toLocaleString()} MAD</p>
+                      </div>
+                      <div>
+                        <label className="text-muted-foreground">Remise</label>
+                        <p className="font-medium">{item.discount}%</p>
+                      </div>
+                      <div>
+                        <label className="text-muted-foreground">TVA</label>
+                        <p className="font-medium">{item.tvaRate}%</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Notes */}
+          {order.notes && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Notes</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm">{order.notes}</p>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+
+        {/* Sidebar */}
+        <div className="space-y-6">
+          {/* Order Summary */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Résumé Financier</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Sous-total HT</span>
+                  <span className="text-sm font-medium">{order.subtotal.toLocaleString()} MAD</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Remise totale</span>
+                  <span className="text-sm text-red-600">-{order.totalDiscount.toLocaleString()} MAD</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">TVA totale</span>
+                  <span className="text-sm font-medium">{order.totalTVA.toLocaleString()} MAD</span>
+                </div>
+                <div className="border-t pt-2">
+                  <div className="flex justify-between text-lg font-bold">
+                    <span>Total TTC</span>
+                    <span className="text-green-600">{order.totalAmount.toLocaleString()} MAD</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Order Status */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Statut de la Commande</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="text-center">
+                <Badge className={`${getStatusColor(order.status)} text-lg px-4 py-2`}>
+                  {getStatusLabel(order.status)}
+                </Badge>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Priorité</span>
+                  <Badge className={getPriorityColor(order.priority)}>
+                    {getPriorityLabel(order.priority)}
+                  </Badge>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Articles</span>
+                  <span className="text-sm font-medium">{order.items.length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Quantité totale</span>
+                  <span className="text-sm font-medium">
+                    {order.items.reduce((sum, item) => sum + item.quantity, 0)}
+                  </span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Actions */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Actions Rapides</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <Button className="w-full" onClick={() => navigate(`/invoicing/create?order=${order.id}`)}>
+                🧾 Créer Facture
+              </Button>
+              <Button className="w-full" variant="outline" onClick={() => setDuplicateModalOpen(true)}>
+                📋 Dupliquer Commande
+              </Button>
+              <Button className="w-full" variant="outline" onClick={() => setPrintModalOpen(true)}>
+                🖨️ Imprimer
+              </Button>
+              <Button className="w-full" variant="outline" onClick={() => setDeliveryNoteModalOpen(true)}>
+                🚚 Bon de Livraison
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* System Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Informations Système</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="flex justify-between">
+                <span className="text-sm text-muted-foreground">Créée le</span>
+                <span className="text-sm">{new Date(order.createdAt).toLocaleDateString('fr-FR')}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-muted-foreground">Modifiée le</span>
+                <span className="text-sm">{new Date(order.updatedAt).toLocaleDateString('fr-FR')}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-muted-foreground">Créée par</span>
+                <span className="text-sm">{order.createdBy}</span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+
+    {/* Modals */}
+    <ActionModal
+      isOpen={deliveryNoteModalOpen}
+      onClose={() => setDeliveryNoteModalOpen(false)}
+      title="Générer Bon de Livraison"
+      description={`Commande ${order.orderNumber}`}
+      onConfirm={() => {
+        showSuccess('Bon généré', 'Bon de livraison généré avec succès!')
+        setDeliveryNoteModalOpen(false)
+        // TODO: Generate delivery note
+      }}
+      confirmText="Générer"
+      size="md"
+    >
+      <div className="space-y-4">
+        <p className="text-sm text-muted-foreground">
+          Générer un bon de livraison pour cette commande de vente.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="text-sm font-medium">Format</label>
+            <select className="w-full mt-1 p-2 border rounded-md">
+              <option>PDF</option>
+              <option>Excel</option>
+              <option>Word</option>
+            </select>
+          </div>
+          <div>
+            <label className="text-sm font-medium">Langue</label>
+            <select className="w-full mt-1 p-2 border rounded-md">
+              <option>Français</option>
+              <option>العربية</option>
+              <option>English</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label className="flex items-center space-x-2">
+            <input type="checkbox" defaultChecked />
+            <span className="text-sm">Inclure les détails des articles</span>
+          </label>
+        </div>
+      </div>
+    </ActionModal>
+
+    <DuplicateModal
+      isOpen={duplicateModalOpen}
+      onClose={() => setDuplicateModalOpen(false)}
+      itemType="Commande de Vente"
+      itemNumber={order.orderNumber}
+      onDuplicate={(options) => {
+        console.log('Duplicate options:', options)
+        // TODO: Create duplicate order
+      }}
+    />
+
+    <PrintModal
+      isOpen={printModalOpen}
+      onClose={() => setPrintModalOpen(false)}
+      itemType="Commande de Vente"
+      itemNumber={order.orderNumber}
+      onPrint={(options) => {
+        console.log('Print options:', options)
+        // TODO: Generate and print document
+      }}
+    />
+  </>
+  )
+}

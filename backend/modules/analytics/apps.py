@@ -1,0 +1,14 @@
+"""
+Analytics app configuration.
+"""
+from django.apps import AppConfig
+
+
+class AnalyticsConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'modules.analytics'
+    verbose_name = 'Advanced Analytics & Business Intelligence'
+    
+    def ready(self):
+        """Initialize analytics signals."""
+        import modules.analytics.signals
