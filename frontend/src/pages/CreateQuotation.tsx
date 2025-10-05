@@ -20,6 +20,7 @@ interface QuotationLine {
 export function CreateQuotation() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { showSuccess, showError } = useToast()
   
   const [formData, setFormData] = useState({
     // Quotation Information
@@ -68,7 +69,6 @@ export function CreateQuotation() {
 
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [notification, setNotification] = useState<{type: 'success' | 'error', message: string} | null>(null)
 
   // Mock data
   const customers = [
@@ -249,21 +249,21 @@ export function CreateQuotation() {
       await new Promise(resolve => setTimeout(resolve, 1000))
       
       // Show success notification
-      setNotification({
-        type: 'success',
-        message: 'Devis créé avec succès!'
-      })
-      
+      showSuccess(
+        'Devis créé',
+        'Devis créé avec succès!'
+      )
+
       // Redirect to sales after 2 seconds
       setTimeout(() => {
         navigate('/sales')
       }, 2000)
-      
+
     } catch (error) {
-      setNotification({
-        type: 'error',
-        message: 'Erreur lors de la création du devis'
-      })
+      showError(
+        'Erreur de création',
+        'Erreur lors de la création du devis'
+      )
     } finally {
       setIsSubmitting(false)
     }
@@ -295,16 +295,7 @@ export function CreateQuotation() {
         </div>
       </div>
 
-      {/* Notification */}
-      {notification && (
-        <Card className={`border-l-4 ${notification.type === 'success' ? 'border-l-green-500 bg-green-50' : 'border-l-red-500 bg-red-50'}`}>
-          <CardContent className="pt-4">
-            <p className={notification.type === 'success' ? 'text-green-700' : 'text-red-700'}>
-              {notification.message}
-            </p>
-          </CardContent>
-        </Card>
-      )}
+
 
       {/* Main Form */}
       <form onSubmit={handleSubmit} className="space-y-6">

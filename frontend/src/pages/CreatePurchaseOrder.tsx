@@ -20,6 +20,7 @@ interface PurchaseOrderLine {
 export function CreatePurchaseOrder() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { showSuccess, showError } = useToast()
   
   const [formData, setFormData] = useState({
     // Purchase Order Information
@@ -74,7 +75,6 @@ export function CreatePurchaseOrder() {
 
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [notification, setNotification] = useState<{type: 'success' | 'error', message: string} | null>(null)
 
   // Mock data
   const suppliers = [
@@ -262,21 +262,21 @@ export function CreatePurchaseOrder() {
       await new Promise(resolve => setTimeout(resolve, 1000))
       
       // Show success notification
-      setNotification({
-        type: 'success',
-        message: 'Bon de commande créé avec succès!'
-      })
-      
+      showSuccess(
+        'Bon de commande créé',
+        'Bon de commande créé avec succès!'
+      )
+
       // Redirect to purchasing after 2 seconds
       setTimeout(() => {
         navigate('/purchasing')
       }, 2000)
-      
+
     } catch (error) {
-      setNotification({
-        type: 'error',
-        message: 'Erreur lors de la création du bon de commande'
-      })
+      showError(
+        'Erreur de création',
+        'Erreur lors de la création du bon de commande'
+      )
     } finally {
       setIsSubmitting(false)
     }
@@ -308,16 +308,7 @@ export function CreatePurchaseOrder() {
         </div>
       </div>
 
-      {/* Notification */}
-      {notification && (
-        <Card className={`border-l-4 ${notification.type === 'success' ? 'border-l-green-500 bg-green-50' : 'border-l-red-500 bg-red-50'}`}>
-          <CardContent className="pt-4">
-            <p className={notification.type === 'success' ? 'text-green-700' : 'text-red-700'}>
-              {notification.message}
-            </p>
-          </CardContent>
-        </Card>
-      )}
+
 
       {/* Main Form */}
       <form onSubmit={handleSubmit} className="space-y-6">

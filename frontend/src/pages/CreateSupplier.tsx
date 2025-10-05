@@ -9,6 +9,7 @@ import { useToast } from '@/components/Toast'
 export function CreateSupplier() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { showSuccess, showError } = useToast()
   
   const [formData, setFormData] = useState({
     // Basic Information
@@ -68,7 +69,6 @@ export function CreateSupplier() {
 
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [notification, setNotification] = useState<{type: 'success' | 'error', message: string} | null>(null)
 
   const regions = [
     'Casablanca-Settat',
@@ -184,21 +184,21 @@ export function CreateSupplier() {
       await new Promise(resolve => setTimeout(resolve, 1000))
       
       // Show success notification
-      setNotification({
-        type: 'success',
-        message: 'Fournisseur créé avec succès!'
-      })
-      
+      showSuccess(
+        'Fournisseur créé',
+        'Fournisseur créé avec succès!'
+      )
+
       // Redirect to purchasing after 2 seconds
       setTimeout(() => {
         navigate('/purchasing')
       }, 2000)
-      
+
     } catch (error) {
-      setNotification({
-        type: 'error',
-        message: 'Erreur lors de la création du fournisseur'
-      })
+      showError(
+        'Erreur de création',
+        'Erreur lors de la création du fournisseur'
+      )
     } finally {
       setIsSubmitting(false)
     }
@@ -230,16 +230,7 @@ export function CreateSupplier() {
         </div>
       </div>
 
-      {/* Notification */}
-      {notification && (
-        <Card className={`border-l-4 ${notification.type === 'success' ? 'border-l-green-500 bg-green-50' : 'border-l-red-500 bg-red-50'}`}>
-          <CardContent className="pt-4">
-            <p className={notification.type === 'success' ? 'text-green-700' : 'text-red-700'}>
-              {notification.message}
-            </p>
-          </CardContent>
-        </Card>
-      )}
+
 
       {/* Main Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
