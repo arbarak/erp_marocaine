@@ -23,11 +23,12 @@ This guide will help you deploy your Django ERP backend to DigitalOcean App Plat
    - Choose "GitHub" as source
    - Select your `erp_marocaine` repository
    - Choose `master` branch
-   - **Important**: Set source directory to `backend`
+   - **Important**: DigitalOcean should now detect Python components automatically
 
 3. **Configure App Settings**
    - **App Name**: `erp-marocaine-backend`
    - **Region**: Choose closest to your users (e.g., Frankfurt for Europe)
+   - **Source Directory**: Leave as root (/) or set to `backend` if prompted
 
 ### Step 2: Configure Environment Variables
 
@@ -158,6 +159,17 @@ print(secrets.token_urlsafe(50))
 
 ## 🐛 Troubleshooting
 
+### "No components detected" Error
+
+If DigitalOcean shows "No components detected":
+
+1. **Check repository structure**: Ensure you have `requirements.txt` in the root directory
+2. **Verify file permissions**: Make sure DigitalOcean has read access to your repository
+3. **Try manual configuration**:
+   - Set source directory to `backend`
+   - Choose "Python" as the environment manually
+4. **Alternative**: Use the Dockerfile approach for more control
+
 ### Build Fails
 
 **Check build logs** in DigitalOcean dashboard:
@@ -165,6 +177,7 @@ print(secrets.token_urlsafe(50))
 1. **Requirements issues**: Verify all packages in requirements.txt are valid
 2. **Python version**: DigitalOcean uses Python 3.9+ by default
 3. **Missing files**: Ensure all necessary files are in the `backend` directory
+4. **Source directory**: Try setting source directory to `backend` if auto-detection fails
 
 ### Database Connection Issues
 

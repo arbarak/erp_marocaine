@@ -1,0 +1,45 @@
+# This file is for DigitalOcean component detection
+# The actual requirements are in backend/requirements.txt
+
+# Core Django and DRF
+Django==5.0.1
+djangorestframework==3.14.0
+django-cors-headers==4.3.1
+django-filter==23.5
+django-environ==0.11.2
+
+# Database
+psycopg2-binary==2.9.9
+
+# Authentication & Authorization
+djangorestframework-simplejwt==5.3.0
+
+# API Documentation
+drf-spectacular==0.27.0
+
+# Redis for caching
+django-redis==5.4.0
+
+# File Storage
+Pillow==10.2.0
+
+# Utilities
+python-dateutil==2.8.2
+pytz==2023.3.post1
+requests==2.31.0
+
+# Monitoring
+sentry-sdk==1.39.2
+
+# WSGI Server for production
+gunicorn==21.2.0
+whitenoise==6.6.0
+
+# Environment and configuration
+python-dotenv==1.0.0
+
+# Database URL parsing for DigitalOcean
+dj-database-url==2.1.0
+
+# Additional packages for production deployment
+gevent==23.9.1
