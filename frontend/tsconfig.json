@@ -31,7 +31,8 @@
       "@/api/*": ["./src/api/*"],
       "@/features/*": ["./src/features/*"],
       "@/shared/*": ["./src/shared/*"],
-      "@/i18n/*": ["./src/i18n/*"]
+      "@/i18n/*": ["./src/i18n/*"],
+      "@/config/*": ["./src/config/*"]
     }
   },
   "include": ["src"],

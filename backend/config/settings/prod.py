@@ -93,7 +93,19 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # CORS settings for production
 CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS')
+CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[])
+CORS_ALLOW_CREDENTIALS = True
+
+# Additional CORS settings for Netlify deployment
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://.*\.netlify\.app$",  # Allow all Netlify subdomains
+    r"^https://.*\.netlify\.com$",  # Allow Netlify preview domains
+]
+
+# CSRF settings for production
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'  # Required for cross-origin requests
 
 # Rate limiting
 RATELIMIT_ENABLE = True

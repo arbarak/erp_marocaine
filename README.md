@@ -121,6 +121,40 @@ npm install
 npm run dev
 ```
 
+## 🌐 Déploiement
+
+### Déploiement Rapide sur Netlify
+
+Le projet est configuré pour un déploiement facile sur Netlify :
+
+1. **Fork le repository** sur GitHub
+2. **Connectez Netlify** à votre repository GitHub
+3. **Configurez les paramètres de build** :
+   - Build command: `cd frontend && npm ci && npm run build`
+   - Publish directory: `frontend/dist`
+4. **Ajoutez les variables d'environnement** dans Netlify :
+   ```bash
+   VITE_API_URL=https://your-backend-api.herokuapp.com
+   VITE_APP_ENV=production
+   NODE_ENV=production
+   ```
+
+### Déploiement Backend
+
+Le backend Django peut être déployé sur :
+- **Heroku** (recommandé pour débuter)
+- **Railway** (moderne et simple)
+- **DigitalOcean App Platform**
+- **AWS/GCP/Azure**
+
+### Variables d'Environnement
+
+Copiez et configurez les fichiers d'environnement :
+- `.env.example` → `.env` (backend)
+- `frontend/.env.example` → `frontend/.env` (frontend)
+
+📖 **Consultez le [Guide de Déploiement Complet](./DEPLOYMENT.md) pour les instructions détaillées.**
+
 ## 📁 Structure du Projet
 
 ```
